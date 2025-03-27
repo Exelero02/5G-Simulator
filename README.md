@@ -1,7 +1,5 @@
 # 5G Network Simulation Framework
 
-![5G Network Visualization](https://via.placeholder.com/800x400.png?text=5G+Network+Simulation)
-
 A C++ simulation framework for modeling 5G network components including base stations, network slicing, and user equipment mobility with quality-of-service metrics.
 
 ## Table of Contents
