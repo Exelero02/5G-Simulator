@@ -1,0 +1,3 @@
+C:/Users/ALBERTUS/CLionProjects/5GSim/cmake-build-debug/CMakeFiles/5GSim.dir
+C:/Users/ALBERTUS/CLionProjects/5GSim/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/ALBERTUS/CLionProjects/5GSim/cmake-build-debug/CMakeFiles/rebuild_cache.dir
