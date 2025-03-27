@@ -87,8 +87,8 @@ classDiagram
 ### Build Instructions
 
 ```bash
-git clone https://github.com/yourusername/5g-network-simulator.git
-cd 5g-network-simulator
+git clone https://github.com/Exelero02/5G-Simulator
+cd 5G-Simulator
 mkdir build && cd build
 cmake ..
 make
