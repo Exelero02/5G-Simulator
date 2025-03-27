@@ -9,8 +9,6 @@ A C++ simulation framework for modeling 5G network components including base sta
 - [Usage](#usage)
 - [Simulation Parameters](#simulation-parameters)
 - [Output Metrics](#output-metrics)
-- [Future Enhancements](#future-enhancements)
-- [License](#license)
 
 ## Features
 
