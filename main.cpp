@@ -67,6 +67,7 @@ public:
     }
 
     double calculateInterference(double ueX, double ueY) const {
+        // In a real implementation, this would consider neighboring cells
         return -90.0; // Constant value for basic simulation
     }
 
