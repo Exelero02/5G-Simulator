@@ -131,18 +131,20 @@ sequenceDiagram
     activate gNB
         Note right of gNB: Calls calculateUrbanMacroPathLoss()<br>+ shadowing (8dB stddev)
         gNB-->>UE: SignalMetrics{sinr, rsrp}
-    deactivate gNB
+    deactivate gnb
 
-    UE->>+Slice: allocateResources(requiredBandwidth)
+    UE->>Slice: allocateResources(requiredBandwidth)
+    activate Slice
     alt Resources available
         Slice->>Slice: bandwidth -= allocated
-        Slice-->>-UE: allocatedBandwidth
+        Slice-->>UE: allocatedBandwidth
         UE->>gNB: servingStation = this
         UE->>Slice: allocatedSlice = this
     else Insufficient resources
-        Slice-->>-UE: 0.0 (rejection)
+        Slice-->>UE: 0.0 (rejection)
         UE->>UE: connectionAttempts++
     end
+    deactivate Slice
 
     loop Movement & Reconnection
         UE->>UE: move() with random displacement
