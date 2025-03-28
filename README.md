@@ -110,6 +110,32 @@ classDiagram
 -Concurrency: Thread-safe connection attempts
 -Randomness: Mersenne Twister PRNG for realistic variations
 
+## Key Relationships
+### FiveGNetwork orchestrates all components
+
+### BaseStations contain multiple NetworkSlices
+
+### UserEquipment connects to:
+One **BaseStation** (serving cell)    
+One **NetworkSlice** (service type)
+
+## Signal Flow
+
+sequenceDiagram
+    participant UE as UserEquipment
+    participant gNB as BaseStation
+    participant Slice as NetworkSlice
+
+    UE->>gNB: Signal Metrics Request (RSRP/SINR)
+    gNB-->>UE: Signal Quality Report
+    UE->>Slice: Resource Request
+    alt Sufficient Resources
+        Slice-->>UE: Allocation Confirmation
+        UE->>gNB: Connection Setup
+    else Insufficient Resources
+        Slice-->>UE: Rejection
+    end
+
 
 
 
