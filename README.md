@@ -123,39 +123,33 @@ One **NetworkSlice** (service type)
 
 ```mermaid
 sequenceDiagram
-    participant UE as User Equipment
-    participant gNB as Base Station
-    participant Slice as Network Slice
-    participant Core as 5G Core
+    participant UE as UserEquipment
+    participant gNB as BaseStation
+    participant Slice as NetworkSlice
 
-    UE->>gNB: Measurement Report (RSRP/RSRQ/SINR)
+    UE->>gNB: calculateSignalMetrics(x,y)
     activate gNB
-        gNB->>gNB: Calculate Path Loss
-        gNB->>gNB: Add Shadowing Effects
-        gNB-->>UE: Signal Metrics (RSRP: -85dBm, SINR: 18dB)
+        Note right of gNB: Calls calculateUrbanMacroPathLoss()<br>+ shadowing (8dB stddev)
+        gNB-->>UE: SignalMetrics{sinr, rsrp}
     deactivate gNB
 
-    UE->>Slice: Slice Request (Type: eMBB, BW: 20MHz)
-    activate Slice
-        alt Slice Available
-            Slice->>Slice: Check Priority & Bandwidth
-            Slice-->>UE: Allocation Grant (15MHz)
-        else Slice Congested
-            Slice-->>UE: Reject (Insufficient Resources)
+    UE->>+Slice: allocateResources(requiredBandwidth)
+    alt Resources available
+        Slice->>Slice: bandwidth -= allocated
+        Slice-->>-UE: allocatedBandwidth
+        UE->>gNB: servingStation = this
+        UE->>Slice: allocatedSlice = this
+    else Insufficient resources
+        Slice-->>-UE: 0.0 (rejection)
+        UE->>UE: connectionAttempts++
+    end
+
+    loop Movement & Reconnection
+        UE->>UE: move() with random displacement
+        opt Connection drops
+            UE->>Slice: releaseResources()
+            UE->>gNB: servingStation = nullptr
         end
-    deactivate Slice
-
-    UE->>gNB: RRC Connection Request
-    activate gNB
-        gNB->>Core: Authentication Request
-        Core-->>gNB: Authentication Response
-        gNB-->>UE: RRC Connection Setup
-    deactivate gNB
-
-    UE->>gNB: Data Transmission
-    loop Every TTI
-        gNB->>Slice: QoS Monitoring
-        Slice-->>gNB: Adjust Allocation
     end
 ```
 
