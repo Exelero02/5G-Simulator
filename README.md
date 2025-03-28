@@ -129,9 +129,9 @@ sequenceDiagram
 
     UE->>gNB: calculateSignalMetrics(x,y)
     activate gNB
-        Note right of gNB: Calls calculateUrbanMacroPathLoss()<br>+ shadowing (8dB stddev)
+        Note right of gNB: Calls calculateUrbanMacroPathLoss() + shadowing (8dB stddev)
         gNB-->>UE: SignalMetrics{sinr, rsrp}
-    deactivate gnb
+    deactivate gNB
 
     UE->>Slice: allocateResources(requiredBandwidth)
     activate Slice
@@ -154,4 +154,3 @@ sequenceDiagram
         end
     end
 ```
-
