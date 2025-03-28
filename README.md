@@ -119,23 +119,43 @@ classDiagram
 One **BaseStation** (serving cell)    
 One **NetworkSlice** (service type)
 
-## Signal Flow
+## Connection Signal Flow
 
+```mermaid
 sequenceDiagram
-    participant UE as UserEquipment
-    participant gNB as BaseStation
-    participant Slice as NetworkSlice
+    participant UE as User Equipment
+    participant gNB as Base Station
+    participant Slice as Network Slice
+    participant Core as 5G Core
 
-    UE->>gNB: Signal Metrics Request (RSRP/SINR)
-    gNB-->>UE: Signal Quality Report
-    UE->>Slice: Resource Request
-    alt Sufficient Resources
-        Slice-->>UE: Allocation Confirmation
-        UE->>gNB: Connection Setup
-    else Insufficient Resources
-        Slice-->>UE: Rejection
+    UE->>gNB: Measurement Report (RSRP/RSRQ/SINR)
+    activate gNB
+        gNB->>gNB: Calculate Path Loss
+        gNB->>gNB: Add Shadowing Effects
+        gNB-->>UE: Signal Metrics (RSRP: -85dBm, SINR: 18dB)
+    deactivate gNB
+
+    UE->>Slice: Slice Request (Type: eMBB, BW: 20MHz)
+    activate Slice
+        alt Slice Available
+            Slice->>Slice: Check Priority & Bandwidth
+            Slice-->>UE: Allocation Grant (15MHz)
+        else Slice Congested
+            Slice-->>UE: Reject (Insufficient Resources)
+        end
+    deactivate Slice
+
+    UE->>gNB: RRC Connection Request
+    activate gNB
+        gNB->>Core: Authentication Request
+        Core-->>gNB: Authentication Response
+        gNB-->>UE: RRC Connection Setup
+    deactivate gNB
+
+    UE->>gNB: Data Transmission
+    loop Every TTI
+        gNB->>Slice: QoS Monitoring
+        Slice-->>gNB: Adjust Allocation
     end
-
-
-
+```
 
